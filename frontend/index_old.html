@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP-Powered Project Discovery Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .project-card {
+            transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px -8px rgba(51, 65, 85, 0.1), 0 6px 12px -6px rgba(51, 65, 85, 0.08); /* slate shadow */
+        }
+        /* Custom scrollbar for project details modal */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: #e2e8f0; /* slate-200 */
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* slate-400 */
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* slate-500 */
+        }
+        #projectDetailModal {
+            z-index: 50;
+        }
+        .tag {
+            background-color: #f0f9ff; /* sky-50 */
+            color: #0369a1; /* sky-700 */
+            padding: 0.2rem 0.6rem; /* Adjusted padding */
+            border-radius: 0.375rem; /* rounded-md */
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* font-medium */
+            margin-right: 0.375rem; /* ~mr-1.5 */
+            margin-bottom: 0.375rem; /* ~mb-1.5 */
+            display: inline-block;
+            border: 1px solid #e0f2fe; /* sky-100 */
+            line-height: 1.25; /* Ensure text fits well */
+        }
+        /* Specific difficulty tags */
+        .tag-difficulty-Beginner { background-color: #f0fdf4; color: #15803d; border-color: #dcfce7; } /* green */
+        .tag-difficulty-Intermediate { background-color: #fffbeb; color: #b45309; border-color: #fef3c7; } /* amber */
+        .tag-difficulty-Advanced { background-color: #fef2f2; color: #b91c1c; border-color: #fee2e2; } /* red */
+
+        /* Consistent input focus styles */
+        select:focus, input[type="text"]:focus {
+            border-color: #0ea5e9; /* sky-500 */
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.25); /* sky-500 with opacity */
+            outline: 2px solid transparent; /* For accessibility, keep outline logic */
+            outline-offset: 2px;
+        }
+        /* Modal transition */
+        #projectDetailModal { transition: opacity 0.3s ease-in-out; }
+        #modalDialog { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-auto text-sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                    <h1 class="ml-3 text-xl font-semibold text-slate-800">Project Discovery Portal</h1>
+                </div>
+                <p class="text-xs text-slate-500 hidden md:block">MCP-Inspired Backend Demo</p>
+            </div>
+        </div>
+    </header>
+     <div class="bg-slate-50 border-b border-slate-200 py-10 text-center">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-800">Find Your Next Coding Adventure</h2>
+            <p class="mt-3 text-md sm:text-lg text-slate-600 max-w-2xl mx-auto">Browse a curated list of projects, filter by your interests, and get started on your next build!</p>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+        <!-- Filters Section -->
+        <section id="filters" class="mb-10 p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+            <h2 class="text-xl font-semibold mb-6 text-slate-700">Filter Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
+                <div>
+                    <label for="categoryFilter" class="block text-sm font-medium text-slate-600 mb-1.5">Category</label>
+                    <select id="categoryFilter" class="w-full p-2.5 border border-slate-300 rounded-lg shadow-sm text-sm text-slate-700 appearance-none bg-white bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E'); background-position: right 0.5rem center; background-size: 1.25em 1.25em;">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="difficultyFilter" class="block text-sm font-medium text-slate-600 mb-1.5">Difficulty</label>
+                    <select id="difficultyFilter" class="w-full p-2.5 border border-slate-300 rounded-lg shadow-sm text-sm text-slate-700 appearance-none bg-white bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E'); background-position: right 0.5rem center; background-size: 1.25em 1.25em;">
+                        <option value="">All Difficulties</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="keywordFilter" class="block text-sm font-medium text-slate-600 mb-1.5">Keyword</label>
+                    <input type="text" id="keywordFilter" placeholder="e.g., python, api, ui" class="w-full p-2.5 border border-slate-300 rounded-lg shadow-sm text-sm text-slate-700 placeholder-slate-400">
+                </div>
+            </div>
+            <div class="mt-8 flex flex-col sm:flex-row justify-end items-center gap-3">
+                <button id="resetFiltersBtn" class="w-full sm:w-auto px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 text-sm">
+                    Reset Filters
+                </button>
+                <button id="applyFiltersBtn" class="w-full sm:w-auto px-5 py-2.5 bg-sky-600 text-white font-medium rounded-lg shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 text-sm">
+                    Apply Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="text-center py-16 hidden">
+            <svg class="animate-spin h-8 w-8 text-sky-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="mt-3 text-md text-slate-500">Fetching projects...</p>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="errorMessage" class="text-center py-16 hidden">
+            <div class="inline-flex flex-col items-center bg-red-50 text-red-700 p-6 rounded-lg border border-red-200 shadow-md max-w-md mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-10 h-10 mb-3 text-red-500">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                  </svg>
+                <div>
+                    <p class="font-semibold text-lg">Oops! Something went wrong.</p>
+                    <p id="errorText" class="text-sm mt-1">Could not fetch project data.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Grid Section -->
+        <section id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+            <!-- Project cards will be injected here by JavaScript -->
+        </section>
+
+        <!-- No Results Message -->
+        <div id="noResultsMessage" class="text-center py-16 text-slate-500 hidden">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-slate-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 13.5h-6" />
+            </svg>
+            <p class="text-xl font-semibold">No Projects Found</p>
+            <p class="mt-1 text-md">Try adjusting your filters or check back later!</p>
+        </div>
+    </main>
+
+    <!-- Project Detail Modal -->
+    <div id="projectDetailModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden scale-95 opacity-0" id="modalDialog">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-5 border-b border-slate-200">
+                <h3 id="modalTitle" class="text-xl font-semibold text-slate-800">Project Details</h3>
+                <button id="closeModalBtn" aria-label="Close modal" class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div id="modalBody" class="p-6 overflow-y-auto modal-content space-y-5 text-slate-600 text-sm leading-relaxed">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+            <!-- Modal Footer -->
+            <div class="p-5 bg-slate-50 border-t border-slate-200 text-right">
+                 <button id="closeModalFooterBtn" class="px-5 py-2 bg-sky-600 text-white font-medium rounded-lg hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 text-sm">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-800 text-slate-400 mt-16 border-t border-slate-700">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center text-xs">
+            <p>© <span id="currentYear"></span> Project Discovery Portal. An MCP-Inspired Demo.</p>
+            <p class="mt-1">Built with Flask & Tailwind CSS. Icon by <a href="https://heroicons.com/" target="_blank" rel="noopener" class="hover:text-sky-400 underline">Heroicons</a>.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:5000';
+
+        const categoryFilter = document.getElementById('categoryFilter');
+        const difficultyFilter = document.getElementById('difficultyFilter');
+        const keywordFilter = document.getElementById('keywordFilter');
+        const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+        const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+        const projectsGrid = document.getElementById('projectsGrid');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        const modal = document.getElementById('projectDetailModal');
+        const modalDialog = document.getElementById('modalDialog');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const closeModalFooterBtn = document.getElementById('closeModalFooterBtn');
+        const currentYearSpan = document.getElementById('currentYear');
+
+        let lastFocusedElement = null; // For modal accessibility
+
+        // --- Utility Functions ---
+        function showLoading() {
+            loadingIndicator.classList.remove('hidden');
+            projectsGrid.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            noResultsMessage.classList.add('hidden');
+        }
+
+        function hideLoading() {
+            loadingIndicator.classList.add('hidden');
+        }
+        
+        function showError(message = "Could not fetch project data. Ensure the backend server is running.") {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+            projectsGrid.classList.add('hidden');
+            noResultsMessage.classList.add('hidden');
+            hideLoading();
+        }
+
+        function hideError() {
+            errorMessage.classList.add('hidden');
+        }
+
+        function showNoResults() {
+            noResultsMessage.classList.remove('hidden');
+            projectsGrid.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            hideLoading();
+        }
+
+        function hideNoResults() {
+            noResultsMessage.classList.add('hidden');
+        }
+
+        // --- API Fetch Functions ---
+        async function fetchCategories() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+                }
+                const data = await response.json();
+                populateCategoryFilter(data.categories);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                 // Optionally provide non-blocking feedback in the UI
+                 categoryFilter.insertAdjacentHTML('afterend', `<p class="text-xs text-red-500 mt-1" id="category-error">Could not load categories.</p>`);
+                 setTimeout(() => document.getElementById('category-error')?.remove(), 5000);
+            }
+        }
+
+        async function fetchProjects(params = {}) {
+            showLoading();
+            hideError();
+            hideNoResults();
+            projectsGrid.classList.add('hidden');
+
+            const queryParams = new URLSearchParams(params).toString();
+            try {
+                const response = await fetch(`${API_BASE_URL}/projects?${queryParams}`);
+                if (!response.ok) {
+                    const errorData = await response.text().catch(() => "Could not read error response.");
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}. Server: ${errorData}`);
+                }
+                const data = await response.json();
+
+                if (data && data.data && Array.isArray(data.data)) {
+                    displayProjects(data.data);
+                    if (data.data.length === 0) {
+                        showNoResults();
+                    } else {
+                        projectsGrid.classList.remove('hidden');
+                    }
+                } else {
+                    console.error("Invalid data structure for projects:", data);
+                    showError("Received invalid project data from the server.");
+                }
+
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+                showError(`Failed to fetch projects: ${error.message}. Check if the backend at ${API_BASE_URL} is active.`);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        async function fetchProjectDetails(projectId) {
+            modalBody.innerHTML = `<div class="text-center p-8"><svg class="animate-spin h-6 w-6 text-sky-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="mt-2 text-sm text-slate-500">Loading details...</p></div>`;
+            if (!modal.classList.contains('hidden')) { // If modal already open, no need to call openModal()
+                // Just update content
+            } else {
+                openModal();
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/projects/${projectId}`);
+                if (!response.ok) {
+                     const errorData = await response.text().catch(() => "Could not read error response.");
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}. Server: ${errorData}`);
+                }
+                const project = await response.json();
+                if (project && project.id) {
+                    displayProjectDetails(project);
+                } else {
+                    throw new Error("Invalid project data received for details.");
+                }
+            } catch (error) {
+                console.error('Error fetching project details:', error);
+                modalBody.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-md"><strong class="font-semibold">Error:</strong> Could not load project details. ${error.message}</div>`;
+            }
+        }
+
+        // --- DOM Manipulation Functions ---
+        function populateCategoryFilter(categories) {
+            if (!categories || !Array.isArray(categories)) return;
+            while (categoryFilter.options.length > 1) categoryFilter.remove(1); // Clear old
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        function getDifficultyTagClass(difficulty) {
+            const baseClass = 'tag';
+            switch (difficulty?.toLowerCase()) {
+                case 'beginner': return `${baseClass} tag-difficulty-Beginner`;
+                case 'intermediate': return `${baseClass} tag-difficulty-Intermediate`;
+                case 'advanced': return `${baseClass} tag-difficulty-Advanced`;
+                default: return baseClass; // Fallback to generic tag style
+            }
+        }
+
+        function displayProjects(projectsData) {
+            projectsGrid.innerHTML = ''; 
+            if (!projectsData || projectsData.length === 0) return;
+            
+            projectsGrid.classList.remove('hidden');
+            hideNoResults();
+            hideError();
+
+            projectsData.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card bg-white rounded-xl shadow-md overflow-hidden border border-slate-200 flex flex-col group';
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `View details for ${project.name}`);
+
+                const shortDescription = project.description.length > 110 ? project.description.substring(0, 110) + '...' : project.description;
+
+                card.innerHTML = `
+                    <div class="p-5 sm:p-6 flex-grow">
+                        <h3 class="text-md sm:text-lg font-semibold text-sky-700 mb-1.5 group-hover:text-sky-600 transition-colors">${project.name}</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm mb-3 leading-relaxed">${shortDescription}</p>
+                    </div>
+                    <div class="p-5 sm:p-6 border-t border-slate-100 bg-slate-50">
+                        <div class="mb-2 flex flex-wrap items-center">
+                            <span class="tag">${project.category}</span>
+                            <span class="${getDifficultyTagClass(project.difficulty)}">${project.difficulty}</span>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">
+                            <strong>Tech:</strong> ${project.suggested_tech.slice(0, 3).join(', ')}${project.suggested_tech.length > 3 ? ', ...' : ''}
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => fetchProjectDetails(project.id));
+                card.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        fetchProjectDetails(project.id);
+                    }
+                });
+                projectsGrid.appendChild(card);
+            });
+        }
+
+        function displayProjectDetails(project) {
+            modalTitle.textContent = project.name;
+            
+            let techHtml = (project.suggested_tech || []).map(tech => `<span class="tag">${tech}</span>`).join('');
+            let resourcesHtml = (project.learning_resources || []).map(res => {
+                const isUrl = res.startsWith('http://') || res.startsWith('https://');
+                const displayText = isUrl ? new URL(res).hostname : res; // Show hostname for cleaner links
+                return `<li class="mb-1.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 inline-block mr-1.5 text-slate-400 align-text-bottom"><path d="M8.75 3.5a.75.75 0 0 0-1.5 0v1.5H5.75a.75.75 0 0 0 0 1.5h1.5V8a.75.75 0 0 0 1.5 0V6.5h1.5a.75.75 0 0 0 0-1.5H8.75V3.5Z" /><path d="M3 14a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h2.5a.75.75 0 0 1 0 1.5H3v10h10V9.5a.75.75 0 0 1 1.5 0V13a1 1 0 0 1-1 1H3Z" /></svg>${isUrl ? `<a href="${res}" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-700 hover:underline">${displayText}</a>` : res}</li>`;
+            }).join('');
+            let keywordsHtml = (project.keywords || []).map(kw => `<span class="tag">${kw}</span>`).join('');
+
+            modalBody.innerHTML = `
+                <p class="text-slate-700 mb-6 text-base">${project.description}</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mb-6">
+                    <div>
+                        <strong class="text-slate-700 font-medium block mb-1.5 text-xs uppercase tracking-wider">Category</strong>
+                        <span class="tag">${project.category}</span>
+                    </div>
+                    <div>
+                        <strong class="text-slate-700 font-medium block mb-1.5 text-xs uppercase tracking-wider">Difficulty</strong>
+                        <span class="${getDifficultyTagClass(project.difficulty)}">${project.difficulty}</span>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <strong class="text-slate-700 font-medium block mb-2 text-xs uppercase tracking-wider">Suggested Technologies</strong>
+                    <div class="flex flex-wrap gap-x-2 gap-y-2">${techHtml || '<span class="text-slate-500 italic">N/A</span>'}</div>
+                </div>
+                
+                ${(project.keywords && project.keywords.length > 0) ? `
+                <div class="mb-6">
+                    <strong class="text-slate-700 font-medium block mb-2 text-xs uppercase tracking-wider">Keywords</strong>
+                    <div class="flex flex-wrap gap-x-2 gap-y-2">${keywordsHtml}</div>
+                </div>` : ''}
+
+                <div>
+                    <strong class="text-slate-700 font-medium block mb-2 text-xs uppercase tracking-wider">Learning Resources</strong>
+                    <ul class="space-y-1 text-slate-600">${resourcesHtml || '<li><span class="text-slate-500 italic">N/A</span></li>'}</ul>
+                </div>
+            `;
+        }
+        
+        function openModal() {
+            lastFocusedElement = document.activeElement; // Save focus
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.add('opacity-100');
+                modalDialog.classList.remove('scale-95', 'opacity-0');
+                modalDialog.classList.add('scale-100', 'opacity-100');
+            });
+            document.body.style.overflow = 'hidden';
+            closeModalBtn.focus(); // Focus on close button in modal
+        }
+
+        function closeModal() {
+            modalDialog.classList.remove('scale-100', 'opacity-100');
+            modalDialog.classList.add('scale-95', 'opacity-0');
+            modal.classList.remove('opacity-100');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                if (lastFocusedElement) {
+                    lastFocusedElement.focus(); // Restore focus
+                }
+            }, 300); // Match CSS transition duration
+        }
+
+        // --- Event Listeners ---
+        applyFiltersBtn.addEventListener('click', () => {
+            const params = {};
+            if (categoryFilter.value) params.category = categoryFilter.value;
+            if (difficultyFilter.value) params.difficulty = difficultyFilter.value;
+            if (keywordFilter.value.trim()) params.keyword = keywordFilter.value.trim();
+            fetchProjects(params);
+        });
+
+        resetFiltersBtn.addEventListener('click', () => {
+            categoryFilter.value = "";
+            difficultyFilter.value = "";
+            keywordFilter.value = "";
+            document.getElementById('category-error')?.remove(); // Clear category error if any
+            fetchProjects(); 
+        });
+        
+        keywordFilter.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                applyFiltersBtn.click();
+                event.preventDefault();
+            }
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        closeModalFooterBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if(currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
+            fetchCategories();
+            fetchProjects(); 
+        });
+    </script>
+</body>
+</html>

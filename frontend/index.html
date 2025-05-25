@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Dev Task Orchestrator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .task-card { /* Renamed */
+            transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+        }
+        .task-card:hover { /* Renamed */
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px -8px rgba(51, 65, 85, 0.1), 0 6px 12px -6px rgba(51, 65, 85, 0.08);
+        }
+        .modal-content::-webkit-scrollbar { width: 8px; }
+        .modal-content::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        .modal-content::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        .modal-content::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        #taskDetailModal { z-index: 50; transition: opacity 0.3s ease-in-out; } /* Renamed */
+        #modalDialog { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+
+        .tag {
+            background-color: #f0f9ff; color: #0369a1; padding: 0.2rem 0.6rem;
+            border-radius: 0.375rem; font-size: 0.75rem; font-weight: 500;
+            margin-right: 0.375rem; margin-bottom: 0.375rem; display: inline-block;
+            border: 1px solid #e0f2fe; line-height: 1.25;
+        }
+        .tag-difficulty-Beginner { background-color: #f0fdf4; color: #15803d; border-color: #dcfce7; }
+        .tag-difficulty-Intermediate { background-color: #fffbeb; color: #b45309; border-color: #fef3c7; }
+        .tag-difficulty-Advanced { background-color: #fef2f2; color: #b91c1c; border-color: #fee2e2; }
+
+        select:focus, input[type="text"]:focus {
+            border-color: #0ea5e9; box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.25);
+            outline: 2px solid transparent; outline-offset: 2px;
+        }
+        .mcp-suggestion-card {
+            border: 1px solid #e2e8f0; /* slate-200 */
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 1rem; /* p-4 */
+            background-color: #f8fafc; /* slate-50 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-auto text-sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
+                    <h1 class="ml-3 text-xl font-semibold text-slate-800">AI Dev Task Orchestrator</h1>
+                </div>
+                <p class="text-xs text-slate-500 hidden md:block">Powered by MCP Concepts</p>
+            </div>
+        </div>
+    </header>
+     <div class="bg-slate-50 border-b border-slate-200 py-10 text-center">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-800">Define Your Dev Task, Get AI Assistance</h2>
+            <p class="mt-3 text-md sm:text-lg text-slate-600 max-w-2xl mx-auto">Describe a development task and discover which MCP-style AI tools could help you achieve it.</p>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <section id="filters" class="mb-10 p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+            <h2 class="text-xl font-semibold mb-6 text-slate-700">Filter Tasks</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
+                <div>
+                    <label for="categoryFilter" class="block text-sm font-medium text-slate-600 mb-1.5">Task Category</label>
+                    <select id="categoryFilter" class="w-full p-2.5 border border-slate-300 rounded-lg shadow-sm text-sm text-slate-700 appearance-none bg-white bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E'); background-position: right 0.5rem center; background-size: 1.25em 1.25em;">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="difficultyFilter" class="block text-sm font-medium text-slate-600 mb-1.5">Difficulty</label>
+                    <select id="difficultyFilter" class="w-full p-2.5 border border-slate-300 rounded-lg shadow-sm text-sm text-slate-700 appearance-none bg-white bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E'); background-position: right 0.5rem center; background-size: 1.25em 1.25em;">
+                        <option value="">All Difficulties</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="keywordFilter" class="block text-sm font-medium text-slate-600 mb-1.5">Keyword</label>
+                    <input type="text" id="keywordFilter" placeholder="e.g., refactor, api, ui" class="w-full p-2.5 border border-slate-300 rounded-lg shadow-sm text-sm text-slate-700 placeholder-slate-400">
+                </div>
+            </div>
+            <div class="mt-8 flex flex-col sm:flex-row justify-end items-center gap-3">
+                <button id="resetFiltersBtn" class="w-full sm:w-auto px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 text-sm">
+                    Reset Filters
+                </button>
+                <button id="applyFiltersBtn" class="w-full sm:w-auto px-5 py-2.5 bg-sky-600 text-white font-medium rounded-lg shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 text-sm">
+                    Apply Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- Freeform Task Input (Optional Feature) -->
+        <section id="freeformTaskSection" class="mb-10 p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+            <h2 class="text-xl font-semibold mb-4 text-slate-700">Or, Describe Your Own Task:</h2>
+            <div>
+                <textarea id="freeformTaskInput" rows="3" class="w-full p-2.5 border border-slate-300 rounded-lg shadow-sm text-sm text-slate-700 placeholder-slate-400 focus:ring-sky-500 focus:border-sky-500" placeholder="e.g., 'Implement user login with OAuth2' or 'Optimize the product search API for speed'"></textarea>
+            </div>
+            <div class="mt-4 text-right">
+                <button id="getMcpSuggestionsBtn" class="px-5 py-2.5 bg-emerald-600 text-white font-medium rounded-lg shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition duration-150 text-sm">
+                    Get MCP Suggestions
+                </button>
+            </div>
+            <div id="freeformMcpSuggestions" class="mt-6 space-y-3 hidden">
+                <!-- MCP Suggestions for freeform input will appear here -->
+            </div>
+        </section>
+
+
+        <div id="loadingIndicator" class="text-center py-16 hidden">
+            <svg class="animate-spin h-8 w-8 text-sky-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="mt-3 text-md text-slate-500">Fetching tasks...</p>
+        </div>
+        
+        <div id="errorMessage" class="text-center py-16 hidden"> /* ... same as before ... */ </div>
+
+        <section id="tasksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+            <!-- Task cards will be injected here -->
+        </section>
+
+        <div id="noResultsMessage" class="text-center py-16 text-slate-500 hidden"> /* ... same as before, but text "No Tasks Found" ... */ </div>
+    </main>
+
+    <div id="taskDetailModal" class="fixed inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden scale-95 opacity-0" id="modalDialog">
+            <div class="flex justify-between items-center p-5 border-b border-slate-200">
+                <h3 id="modalTitle" class="text-xl font-semibold text-slate-800">Task Details</h3>
+                <button id="closeModalBtn" aria-label="Close modal" class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div id="modalBody" class="p-6 overflow-y-auto modal-content space-y-5 text-slate-600 text-sm leading-relaxed">
+                <!-- Task Content will be injected by JavaScript -->
+            </div>
+            <!-- MCP Suggestions Section in Modal -->
+            <div class="p-6 border-t border-slate-200 bg-slate-50">
+                <h4 class="text-lg font-semibold text-slate-700 mb-4">Potential MCP-Powered Assists:</h4>
+                <div id="modalMcpSuggestions" class="space-y-4">
+                    <div class="text-center text-slate-500 italic">Loading MCP suggestions...</div>
+                    <!-- MCP suggestions will be injected here -->
+                </div>
+            </div>
+            <div class="p-5 bg-slate-100 border-t border-slate-200 text-right">
+                 <button id="closeModalFooterBtn" class="px-5 py-2 bg-sky-600 text-white font-medium rounded-lg hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 text-sm">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-slate-800 text-slate-400 mt-16 border-t border-slate-700"> /* ... same as before ... */ </footer>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:5000';
+
+        // DOM Elements (some renamed, new ones added)
+        const categoryFilter = document.getElementById('categoryFilter');
+        const difficultyFilter = document.getElementById('difficultyFilter');
+        const keywordFilter = document.getElementById('keywordFilter');
+        const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+        const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+        const tasksGrid = document.getElementById('tasksGrid'); // Renamed
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        const modal = document.getElementById('taskDetailModal'); // Renamed
+        const modalDialog = document.getElementById('modalDialog');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalMcpSuggestionsContainer = document.getElementById('modalMcpSuggestions');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const closeModalFooterBtn = document.getElementById('closeModalFooterBtn');
+        
+        const freeformTaskInput = document.getElementById('freeformTaskInput');
+        const getMcpSuggestionsBtn = document.getElementById('getMcpSuggestionsBtn');
+        const freeformMcpSuggestionsContainer = document.getElementById('freeformMcpSuggestions');
+
+        const currentYearSpan = document.getElementById('currentYear');
+        let lastFocusedElement = null;
+
+        // --- Utility Functions (show/hide loading, error, noResults) - largely the same ---
+        function showLoading(message = "Fetching tasks...") {
+            loadingIndicator.querySelector('p').textContent = message;
+            loadingIndicator.classList.remove('hidden');
+            tasksGrid.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            noResultsMessage.classList.add('hidden');
+        }
+        function hideLoading() { loadingIndicator.classList.add('hidden'); }
+        function showError(message = "Could not fetch data.") { /* ... same ... */ }
+        function hideError() { /* ... same ... */ }
+        function showNoResults(message = "No tasks found matching your criteria.") {
+            noResultsMessage.querySelector('p.font-semibold').textContent = message === "No tasks found matching yourcriteria." ? "No Tasks Found" : "No Suggestions";
+            noResultsMessage.querySelector('p.mt-1').textContent = message === "No tasks found matching yourcriteria." ? "Try adjusting your filters or check back later!" : "Could not find relevant MCP assists for this input.";
+            noResultsMessage.classList.remove('hidden');
+            tasksGrid.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            hideLoading();
+        }
+        function hideNoResults() { /* ... same ... */ }
+
+
+        // --- API Fetch Functions ---
+        async function fetchTaskCategories() { // Renamed
+            try {
+                const response = await fetch(`${API_BASE_URL}/task_categories`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                populateCategoryFilter(data.categories);
+            } catch (error) {
+                console.error('Error fetching task categories:', error);
+                categoryFilter.insertAdjacentHTML('afterend', `<p class="text-xs text-red-500 mt-1" id="category-error">Could not load categories.</p>`);
+                setTimeout(() => document.getElementById('category-error')?.remove(), 5000);
+            }
+        }
+
+        async function fetchDevTasks(params = {}) { // Renamed
+            showLoading();
+            hideError(); hideNoResults();
+            tasksGrid.classList.add('hidden');
+
+            const queryParams = new URLSearchParams(params).toString();
+            try {
+                const response = await fetch(`${API_BASE_URL}/dev_tasks?${queryParams}`);
+                if (!response.ok) { /* ... error handling ... */ }
+                const data = await response.json();
+
+                if (data && data.data && Array.isArray(data.data)) {
+                    displayDevTasks(data.data); // Renamed
+                    if (data.data.length === 0) showNoResults();
+                    else tasksGrid.classList.remove('hidden');
+                } else { /* ... error handling ... */ }
+            } catch (error) { /* ... error handling ... */ } 
+            finally { hideLoading(); }
+        }
+        
+        async function fetchTaskDetails(taskId) { // Renamed
+            // Show basic loading in modal body for task details
+            modalBody.innerHTML = `<div class="text-center p-8"><svg class="animate-spin h-6 w-6 text-sky-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="mt-2 text-sm text-slate-500">Loading task details...</p></div>`;
+            modalMcpSuggestionsContainer.innerHTML = `<div class="text-center text-slate-500 italic">Fetching MCP suggestions...</div>`;
+            openModal();
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/dev_tasks/${taskId}`);
+                if (!response.ok) { /* ... error handling ... */ }
+                const task = await response.json();
+                if (task && task.id) {
+                    displayTaskDetails(task); // Renamed
+                    // Now fetch MCP suggestions for this task
+                    fetchAndDisplayMcpSuggestions(task.description + " " + task.keywords.join(" "), task.id, modalMcpSuggestionsContainer);
+                } else { throw new Error("Invalid task data received."); }
+            } catch (error) {
+                console.error('Error fetching task details:', error);
+                modalBody.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-md"><strong>Error:</strong> Could not load task details. ${error.message}</div>`;
+                modalMcpSuggestionsContainer.innerHTML = `<div class="text-red-500 italic">Could not load MCP suggestions.</div>`;
+            }
+        }
+
+        async function fetchAndDisplayMcpSuggestions(taskDescription, taskId = null, containerElement) {
+            containerElement.innerHTML = `<div class="text-center text-slate-500 italic">Looking for helpful MCPs...</div>`;
+            try {
+                const payload = { task_description: taskDescription };
+                if (taskId) payload.task_id = taskId;
+
+                const response = await fetch(`${API_BASE_URL}/suggest_mcp_actions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: "Unknown error from MCP suggestion API." }));
+                    throw new Error(`HTTP ${response.status}: ${errorData.detail || response.statusText}`);
+                }
+                const suggestionsData = await response.json();
+                displayMcpSuggestions(suggestionsData.suggested_mcps || [], containerElement);
+            } catch (error) {
+                console.error('Error fetching MCP suggestions:', error);
+                containerElement.innerHTML = `<div class="text-red-600 p-3 bg-red-50 rounded-md">Failed to get MCP suggestions: ${error.message}</div>`;
+            }
+        }
+
+        // --- DOM Manipulation Functions ---
+        function populateCategoryFilter(categories) { /* ... same ... */ }
+        function getDifficultyTagClass(difficulty) { /* ... same ... */ }
+
+        function displayDevTasks(tasksData) { // Renamed
+            tasksGrid.innerHTML = ''; 
+            if (!tasksData || tasksData.length === 0) return;
+            
+            tasksGrid.classList.remove('hidden');
+            hideNoResults(); hideError();
+
+            tasksData.forEach(task => {
+                const card = document.createElement('div');
+                card.className = 'task-card bg-white rounded-xl shadow-md overflow-hidden border border-slate-200 flex flex-col group'; // Renamed
+                card.setAttribute('role', 'button'); card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `View details for ${task.name}`);
+
+                const shortDescription = task.description.length > 100 ? task.description.substring(0, 100) + '...' : task.description;
+
+                card.innerHTML = `
+                    <div class="p-5 sm:p-6 flex-grow">
+                        <h3 class="text-md sm:text-lg font-semibold text-sky-700 mb-1.5 group-hover:text-sky-600 transition-colors">${task.name}</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm mb-3 leading-relaxed">${shortDescription}</p>
+                    </div>
+                    <div class="p-5 sm:p-6 border-t border-slate-100 bg-slate-50">
+                        <div class="mb-2 flex flex-wrap items-center">
+                            <span class="tag">${task.category}</span>
+                            <span class="${getDifficultyTagClass(task.difficulty)}">${task.difficulty}</span>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">
+                            <strong>Effort:</strong> ~${task.estimated_effort_hours || 'N/A'} hrs   
+                            <strong>Keywords:</strong> ${task.keywords.slice(0, 2).join(', ')}${task.keywords.length > 2 ? ', ...' : ''}
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => fetchTaskDetails(task.id)); // Renamed
+                card.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') fetchTaskDetails(task.id); // Renamed
+                });
+                tasksGrid.appendChild(card);
+            });
+        }
+
+        function displayTaskDetails(task) { // Renamed
+            modalTitle.textContent = task.name;
+            let keywordsHtml = (task.keywords || []).map(kw => `<span class="tag">${kw}</span>`).join('');
+
+            modalBody.innerHTML = `
+                <p class="text-slate-700 mb-6 text-base">${task.description}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mb-6">
+                    <div>
+                        <strong class="text-slate-700 font-medium block mb-1.5 text-xs uppercase tracking-wider">Category</strong>
+                        <span class="tag">${task.category}</span>
+                    </div>
+                    <div>
+                        <strong class="text-slate-700 font-medium block mb-1.5 text-xs uppercase tracking-wider">Difficulty</strong>
+                        <span class="${getDifficultyTagClass(task.difficulty)}">${task.difficulty}</span>
+                    </div>
+                    <div>
+                        <strong class="text-slate-700 font-medium block mb-1.5 text-xs uppercase tracking-wider">Est. Effort</strong>
+                        <span class="text-slate-600">${task.estimated_effort_hours || 'N/A'} hours</span>
+                    </div>
+                </div>
+                ${(task.keywords && task.keywords.length > 0) ? `
+                <div class="mb-6">
+                    <strong class="text-slate-700 font-medium block mb-2 text-xs uppercase tracking-wider">Keywords</strong>
+                    <div class="flex flex-wrap gap-x-2 gap-y-2">${keywordsHtml}</div>
+                </div>` : ''}
+            `;
+        }
+
+        function displayMcpSuggestions(suggestions, containerElement) {
+            containerElement.innerHTML = ''; // Clear previous
+            if (!suggestions || suggestions.length === 0) {
+                containerElement.innerHTML = `<p class="italic text-slate-500">No specific MCP suggestions found for this task. Consider general purpose tools or refining your task description.</p>`;
+                return;
+            }
+            suggestions.forEach(mcp => {
+                const mcpCard = document.createElement('div');
+                mcpCard.className = 'mcp-suggestion-card';
+                mcpCard.innerHTML = `
+                    <h5 class="font-semibold text-sky-700 text-md mb-1">${mcp.name}</h5>
+                    <p class="text-xs text-slate-500 mb-1.5"><strong class="font-medium text-slate-600">Why?</strong> ${mcp.relevance_trigger}</p>
+                    <p class="text-xs text-slate-600">${mcp.description}</p>
+                `;
+                containerElement.appendChild(mcpCard);
+            });
+        }
+        
+        function openModal() { /* ... same ... */ }
+        function closeModal() { /* ... same ... */ }
+
+        // --- Event Listeners ---
+        applyFiltersBtn.addEventListener('click', () => {
+            const params = {};
+            if (categoryFilter.value) params.category = categoryFilter.value;
+            if (difficultyFilter.value) params.difficulty = difficultyFilter.value;
+            if (keywordFilter.value.trim()) params.keyword = keywordFilter.value.trim();
+            fetchDevTasks(params); // Renamed
+        });
+        resetFiltersBtn.addEventListener('click', () => { /* ... calls fetchDevTasks() ... */ });
+        keywordFilter.addEventListener('keypress', (event) => { /* ... same ... */ });
+        closeModalBtn.addEventListener('click', closeModal);
+        closeModalFooterBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
+        document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();});
+
+        getMcpSuggestionsBtn.addEventListener('click', () => {
+            const taskText = freeformTaskInput.value.trim();
+            if (taskText) {
+                freeformMcpSuggestionsContainer.classList.remove('hidden');
+                fetchAndDisplayMcpSuggestions(taskText, null, freeformMcpSuggestionsContainer);
+            } else {
+                freeformMcpSuggestionsContainer.innerHTML = `<p class="italic text-amber-700 bg-amber-50 p-3 rounded-md">Please describe a task first.</p>`;
+                freeformMcpSuggestionsContainer.classList.remove('hidden');
+            }
+        });
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if(currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
+            fetchTaskCategories(); // Renamed
+            fetchDevTasks();   // Renamed
+            document.querySelector('#noResultsMessage p.font-semibold').textContent = "No Tasks Found"; // Adjust initial no results text
+            document.querySelector('#noResultsMessage p.mt-1').textContent = "Try adjusting your filters or check back later!";
+        });
+    </script>
+</body>
+</html>

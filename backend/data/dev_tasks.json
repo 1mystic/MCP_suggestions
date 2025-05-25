@@ -1,0 +1,56 @@
+[
+    {
+        "id": "task001",
+        "name": "Refactor user authentication module",
+        "category": "Backend Refactor",
+        "difficulty": "Intermediate",
+        "description": "Improve the security and readability of the existing user authentication code. Consider extracting logic into smaller functions and adding more comprehensive error handling.",
+        "keywords": ["refactor", "auth", "security", "python", "backend"],
+        "estimated_effort_hours": 8
+    },
+    {
+        "id": "task002",
+        "name": "Build a new UI for profile settings",
+        "category": "Frontend Feature",
+        "difficulty": "Intermediate",
+        "description": "Design and implement a new user interface for managing profile settings. Ensure it's responsive and user-friendly. Requires form handling and API integration.",
+        "keywords": ["ui", "frontend", "react", "profile", "ux"],
+        "estimated_effort_hours": 12
+    },
+    {
+        "id": "task003",
+        "name": "Optimize database query for reports",
+        "category": "Database Optimization",
+        "difficulty": "Advanced",
+        "description": "The current query for generating monthly sales reports is slow. Analyze the query, identify bottlenecks, and optimize it for better performance. May involve indexing or query restructuring.",
+        "keywords": ["database", "sql", "performance", "optimization", "postgres"],
+        "estimated_effort_hours": 6
+    },
+    {
+        "id": "task004",
+        "name": "Write E2E tests for checkout flow",
+        "category": "Testing",
+        "difficulty": "Intermediate",
+        "description": "Develop end-to-end tests to cover the entire user checkout process, from adding items to cart to successful payment confirmation.",
+        "keywords": ["testing", "e2e", "playwright", "cypress", "automation"],
+        "estimated_effort_hours": 10
+    },
+    {
+        "id": "task005",
+        "name": "Integrate with a third-party payment gateway",
+        "category": "API Integration",
+        "difficulty": "Advanced",
+        "description": "Add support for a new payment gateway (e.g., Stripe, PayPal) by integrating their API into our backend services.",
+        "keywords": ["api", "payment", "integration", "stripe", "backend"],
+        "estimated_effort_hours": 16
+    },
+    {
+        "id": "task006",
+        "name": "Setup CI/CD pipeline for automated deployment",
+        "category": "DevOps",
+        "difficulty": "Advanced",
+        "description": "Configure a continuous integration and continuous deployment (CI/CD) pipeline using GitHub Actions or Jenkins to automate the build, test, and deployment process.",
+        "keywords": ["ci/cd", "devops", "automation", "github actions", "deployment"],
+        "estimated_effort_hours": 20
+    }
+]

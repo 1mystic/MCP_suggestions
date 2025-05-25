@@ -1,0 +1,86 @@
+[
+    {
+        "id": "proj001",
+        "name": "Personal Portfolio Website",
+        "category": "Web Development",
+        "difficulty": "Beginner",
+        "description": "Create a stunning personal portfolio to showcase your skills and projects. Focus on clean design and responsive layout.",
+        "suggested_tech": ["HTML5", "CSS3", "JavaScript (ES6+)", "Git"],
+        "learning_resources": [
+            "MDN Web Docs for HTML, CSS, JS",
+            "freeCodeCamp Responsive Web Design",
+            "GitHub Learning Lab"
+        ],
+        "keywords": ["frontend", "portfolio", "web", "responsive", "ui"]
+    },
+    {
+        "id": "proj002",
+        "name": "Weather Dashboard App",
+        "category": "Web Development",
+        "difficulty": "Intermediate",
+        "description": "Build an application that fetches and displays weather data from a third-party API (e.g., OpenWeatherMap). Include features like search by city and 5-day forecast.",
+        "suggested_tech": ["JavaScript", "Fetch API / Axios", "HTML", "CSS", "Bootstrap/Tailwind (optional)"],
+        "learning_resources": [
+            "OpenWeatherMap API Documentation",
+            "JavaScript Promises and Async/Await tutorials",
+            "Tutorials on working with JSON data"
+        ],
+        "keywords": ["api", "frontend", "weather", "dashboard", "javascript"]
+    },
+    {
+        "id": "proj003",
+        "name": "Task Management API",
+        "category": "Backend Development",
+        "difficulty": "Intermediate",
+        "description": "Develop a RESTful API for managing tasks. Implement CRUD (Create, Read, Update, Delete) operations for tasks, which should have properties like title, description, status, and due date.",
+        "suggested_tech": ["Python", "Flask / FastAPI", "SQLAlchemy (optional)", "Postman / Insomnia"],
+        "learning_resources": [
+            "Flask Mega-Tutorial (for concepts)",
+            "FastAPI official documentation",
+            "REST API design best practices"
+        ],
+        "keywords": ["api", "backend", "python", "rest", "crud", "flask"]
+    },
+    {
+        "id": "proj004",
+        "name": "Simple E-commerce Cart API",
+        "category": "Backend Development",
+        "difficulty": "Advanced",
+        "description": "Design and implement the backend API for a shopping cart. Features should include adding items, removing items, updating quantities, and calculating totals. Consider product inventory.",
+        "suggested_tech": ["Node.js", "Express.js", "MongoDB / PostgreSQL", "JWT for auth (optional)"],
+        "learning_resources": [
+            "Express.js documentation",
+            "MongoDB University or PostgreSQL tutorials",
+            "Guides on API security and JWT"
+        ],
+        "keywords": ["ecommerce", "api", "backend", "cart", "nodejs", "database"]
+    },
+    {
+        "id": "proj005",
+        "name": "AI Chatbot with Rule-Based Logic",
+        "category": "AI/ML",
+        "difficulty": "Intermediate",
+        "description": "Create a simple command-line or web-based chatbot that responds to user input based on predefined rules and patterns. No complex NLP needed, focus on the logic.",
+        "suggested_tech": ["Python", "Regular Expressions"],
+        "learning_resources": [
+            "Python's `re` module documentation",
+            "Tutorials on building rule-based systems",
+            "Basic chatbot design principles"
+        ],
+        "keywords": ["ai", "chatbot", "python", "nlp", "rules"]
+    },
+    {
+        "id": "proj006",
+        "name": "Data Visualization Dashboard",
+        "category": "Data Science",
+        "difficulty": "Intermediate",
+        "description": "Build a web dashboard to visualize a dataset (e.g., CSV file). Use libraries like Chart.js or D3.js (for ambitious learners) to create interactive charts and graphs.",
+        "suggested_tech": ["Python (for data processing - Pandas)", "Flask (to serve data/HTML)", "JavaScript", "Chart.js / Plotly.js"],
+        "learning_resources": [
+            "Pandas documentation",
+            "Chart.js or Plotly.js documentation",
+            "Tutorials on Flask for serving web pages"
+        ],
+        "keywords": ["data visualization", "dashboard", "charts", "python", "javascript", "data science"]
+    }
+]
