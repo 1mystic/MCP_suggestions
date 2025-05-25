@@ -1,0 +1,285 @@
+{
+  "last_updated": "2025-05-25T13:38:34.045274",
+  "server_count": 28,
+  "servers": [
+    {
+      "name": "Claude x MCP",
+      "description": "(https://modelcontextprotocol.io/quickstart)                                           |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Task involves web automation or browser interactions.",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Zed x MCP",
+      "description": "(https://zed.dev/blog/mcp)                                                      |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://zed.dev/blog/mcp)                                                      |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Cody x MCP",
+      "description": "(https://sourcegraph.com/blog/cody-supports-anthropic-model-context-protocol) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://sourcegraph.com/blog/cody-supports-anthropic-model-context-protocol) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Continue x MCP",
+      "description": "(https://blog.continue.dev/model-context-protocol)                                  |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://blog.continue.dev/model-context-protocol)                                  |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "GCA x MCP",
+      "description": "(https://github.com/Upsonic/gpt-computer-assistant)                                      |",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/Upsonic/gpt-computer-assistant",
+      "use_case_trigger": "Task involves version control or repository management.",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "LibreChat Agents x MCP",
+      "description": "(https://www.librechat.ai/docs/features/agents#model-context-protocol-mcp) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://www.librechat.ai/docs/features/agents#model-context-protocol-mcp) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Cursor x MCP",
+      "description": "(https://docs.cursor.com/advanced/model-context-protocol) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://docs.cursor.com/advanced/model-context-protocol) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Enconvo x MCP",
+      "description": "(https://docs.enconvo.com/docs/features/model-context-protocol) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://docs.enconvo.com/docs/features/model-context-protocol) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Goose x MCP",
+      "description": "(https://block.github.io/goose/docs/getting-started/using-extensions) |",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Task involves version control or repository management.",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Nerve x MCP",
+      "description": "(https://github.com/evilsocket/nerve/blob/main/docs/index.md#%EF%B8%8F-adding-tools) |",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/evilsocket/nerve/blob/main/docs/index.md#%EF%B8%8F-adding-tools",
+      "use_case_trigger": "Task involves version control or repository management.",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "<div align=\"center\"><img src=\"https://raw.githubusercontent.com/mcp-router/mcp-router/refs/heads/main/static/img/logo.svg\" height=\"20\"/></div>",
+      "description": "(https://mcp-router.net) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://mcp-router.net) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "MCP Router",
+      "description": "(https://mcp-router.net) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/mcp-router/mcp-router",
+      "use_case_trigger": "Useful for tasks involving: (https://mcp-router.net) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "MCP Router x MCP",
+      "description": "(https://mcp-router.net) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://mcp-router.net) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "<div align=\"center\"><img src=\"https://raw.githubusercontent.com/pietrozullo/mcp-use/refs/heads/main/docs/favicon.svg\" height=\"20\"/></div>",
+      "description": "(https://docs.mcp-use.io/introduction) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/pietrozullo/mcp-use",
+      "use_case_trigger": "Useful for tasks involving: (https://docs.mcp-use.io/introduction) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "mcp-use",
+      "description": "(https://docs.mcp-use.io/introduction) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/pietrozullo/mcp-use",
+      "use_case_trigger": "Useful for tasks involving: (https://docs.mcp-use.io/introduction) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "mcp-use x MCP",
+      "description": "(https://docs.mcp-use.io/introduction) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://docs.mcp-use.io/introduction) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "<div align=\"center\"><img src=\"https://wassist.app/whatsmcp.png\" height=\"20\"/></div>",
+      "description": "(https://wassist.app/mcp/) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://wassist.app/mcp/) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "WhatsMCP",
+      "description": "(https://wassist.app/mcp/) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://wassist.app/mcp/) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "WhatsApp x MCP",
+      "description": "(https://wassist.app/mcp/) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://wassist.app/mcp/) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "VS Code x MCP",
+      "description": "(https://code.visualstudio.com/docs/copilot/chat/mcp-servers) |",
+      "keywords": [],
+      "source": "awesome-mcp-servers",
+      "github_url": null,
+      "use_case_trigger": "Useful for tasks involving: (https://code.visualstudio.com/docs/copilot/chat/mcp-servers) |...",
+      "category": "Supported Clients"
+    },
+    {
+      "name": "Gitingest-MCP",
+      "description": "(https://github.com/puravparab/Gitingest-MCP) - Gitingest integration providing prompt friendly summmaries of Github repos",
+      "keywords": [
+        "github",
+        "control",
+        "version"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/puravparab/Gitingest-MCP",
+      "use_case_trigger": "Task involves version control or repository management.",
+      "category": "🔄 <a name=\"version-control\"></a>Version Control"
+    },
+    {
+      "name": "Ihor-Sokoliuk/MCP-SearXNG",
+      "description": "(https://docs.searxng.org)",
+      "keywords": [
+        "web",
+        "search"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/ihor-sokoliuk/mcp-searxng",
+      "use_case_trigger": "Useful for tasks involving: (https://docs.searxng.org)...",
+      "category": "🔍 <a name=\"search-web\"></a>Search & Web"
+    },
+    {
+      "name": "eBook-mcp",
+      "description": "(https://github.com/onebirdrocks/ebook-mcp) - A lightweight MCP server that allows LLMs to read and interact with your personal PDF and EPUB ebooks on your local machine. Ideal for building AI reading assistants or chat-based ebook interfaces.",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/onebirdrocks/ebook-mcp",
+      "use_case_trigger": "Task involves web automation or browser interactions.",
+      "category": "📝 <a name=\"note-taking\"></a>Note Taking"
+    },
+    {
+      "name": "Mastra/mcp",
+      "description": "(https://github.com/mastra-ai/mastra/tree/main/packages/mcp)<sup><sup>⭐</sup></sup> - Provides AI assistants with direct access to Mastra.ai's complete knowledge base.",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/mastra-ai/mastra/tree/main/packages/mcp",
+      "use_case_trigger": "Task involves version control or repository management.",
+      "category": "💻 <a name=\"development-tools\"></a>Development Tools"
+    },
+    {
+      "name": "MCP Open Library",
+      "description": "(https://github.com/8enSmith/mcp-open-library) - A Model Context Protocol (MCP) server for the Internet Archive's Open Library API that enables AI assistants to search for book and author information.",
+      "keywords": [
+        "github",
+        "api",
+        "search"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/8enSmith/mcp-open-library",
+      "use_case_trigger": "Task requires searching or information retrieval.",
+      "category": "🧑‍🎨 <a name=\"art-literature\"></a>Art & Literature"
+    },
+    {
+      "name": "mcp-get",
+      "description": "(https://github.com/michaellatman/mcp-get) - CLI tool for installing and managing MCP servers. Simplifies server installation and configuration for Claude Desktop.",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/michaellatman/mcp-get",
+      "use_case_trigger": "Task involves version control or repository management.",
+      "category": "Server Managers"
+    },
+    {
+      "name": "Remote MCP",
+      "description": "(https://github.com/ssut/Remote-MCP) - Solution to Remote MCP Communication, enabling effortless integration for centralized management of Model Context",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/ssut/Remote-MCP",
+      "use_case_trigger": "Task involves version control or repository management.",
+      "category": "Server Managers"
+    },
+    {
+      "name": "yamcp",
+      "description": "(https://github.com/hamidra/yamcp) - A Model Context Workspace Manager. Oraganize your MCP servers in local workspaces (coding, design, research, ...), scan, monitor, and integrate each workspace with AI apps via a unified CLI.",
+      "keywords": [
+        "github"
+      ],
+      "source": "awesome-mcp-servers",
+      "github_url": "https://github.com/hamidra/yamcp",
+      "use_case_trigger": "Task requires searching or information retrieval.",
+      "category": "Server Managers"
+    }
+  ]
+}
